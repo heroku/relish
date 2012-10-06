@@ -1,30 +1,31 @@
 require "press"
+require "relish/release"
 
 module Relish
   extend Press
 
-  def self.create(entity_id, data)
-    pdfm __FILE__, __method__, entity_id: entity_id
-    Release.create(entity_id, data)
+  def self.create(id, data)
+    pdfm __FILE__, __method__, id: id
+    Release.create(id, data)
   end
 
-  def self.read(entity_id, release_id)
-    pdfm __FILE__, __method__, entity_id: entity_id, release_id: release_id
-    Release.read(entity_id, release_id)
+  def self.read(id, version)
+    pdfm __FILE__, __method__, id: id, version: version
+    Release.read(id, version)
   end
 
-  def self.readall(entity_id)
-    pdfm __FILE__, __method__, entity_id: entity_id
-    Release.readall(entity_id)
+  def self.readall(id)
+    pdfm __FILE__, __method__, id: id
+    Release.readall(id)
   end
 
-  def self.update(entity_id, release_id, data)
-    pdfm __FILE__, __method__, entity_id: entity_id, release_id: release_id
-    Release.update(entity_id, release_id, data)
+  def self.update(id, version, data)
+    pdfm __FILE__, __method__, id: id, version: version
+    Release.update(id, version, data)
   end
 
-  def self.delete(entity_id, release_id)
-    pdfm __FILE__, __method__, entity_id: entity_id, release_id: release_id
-    Release.delete(entity_id, release_id)
+  def self.delete(id, version)
+    pdfm __FILE__, __method__, id: id, version: version
+    Release.delete(id, version)
   end
 end

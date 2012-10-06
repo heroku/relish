@@ -5,9 +5,11 @@ module Relish
   class Release
     extend Press
 
+    attr_accessor :items
+
     def self.conf(*attrs)
       attrs.each do |attr|
-        instance_eval "def #{attr}; @#{attr} ||= ENV['#{attr.upcase}'] || raise('missing conf: #{attr.upcase}') end", __FILE__, __LINE__
+        instance_eval "def #{attr}; @#{attr} ||= ENV['#{attr.upcase}'] || raise('missing configuration: #{attr.upcase}') end", __FILE__, __LINE__
       end
     end
 
@@ -22,8 +24,8 @@ module Relish
       end
     end
 
-    schema entity_id:      :S,
-           release_id:     :N,
+    schema id:             :S,
+           version:        :N,
            descr:          :S,
            user_id:        :N,
            slug_id:        :S,
@@ -38,24 +40,87 @@ module Relish
       @db ||= Fog::AWS::DynamoDB.new(aws_access_key_id: relish_aws_access_key, aws_secret_access_key: relish_aws_secret_key)
     end
 
-    def self.create(entity_id, data)
-      pdfm __FILE__, __method__, entity_id: entity_id
+    def self.query_current_version(id)
+      response = db.query(relish_table_name, {S: id}, ConsistentRead: true, Limit: 1, ScanIndexForward: false)
+      if response.status != 200
+        raise('status: #{response.status}')
+      end
+      if response.body['Count'] == 1
+        response.body['Items'].first
+      end
     end
 
-    def self.read(entity_id, release_id)
-      pdfm __FILE__, __method__, entity_id: entity_id, release_id: release_id
+    def self.put_current_version(items)
+      response = db.put_item(relish_table_name, items, {Expected: {id: {Exists: false}, version: {Exists: false}}})
+      if response.status != 200
+        raise('status: #{response.status}')
+      end
     end
 
-    def self.readall(entity_id)
-      pdfm __FILE__, __method__, entity_id: entity_id
+    def self.get_version(id, version)
+      response = db.get_item(relish_table_name, {HashKeyElement: {S: id}, RangeKeyElement: {N: version}})
+      if response.status != 200
+         raise('status: #{response.status}')
+      end
+      response.body['Item']
     end
 
-    def self.update(entity_id, release_id, data)
-      pdfm __FILE__, __method__, entity_id: entity_id, release_id: release_id
+    def self.put_version(items)
+      response = db.put_item(relish_table_name, items, {Expected: {id: {Exists: true}, version: {Exists: true}}})
+      if response.status != 200
+         raise('status: #{response.status}')
+      end
     end
 
-    def self.delete(entity_id, release_id)
-      pdfm __FILE__, __method__, entity_id: entity_id, release_id: release_id
+    def self.create(id, data)
+      pdfm __FILE__, __method__, id: id
+      items = query_current_version(id)
+      release = new
+      if items.nil?
+        release.items = {}
+        release.id = id
+        release.version = "1"
+      else
+        release.items = items
+        release.version = (release.version.to_i + 1).to_s
+      end
+      data.each do |k, v|
+        send("#{k}=", v)
+      end
+      put_current_version(release.items)
+      release
+    end
+
+    def self.read(id, version)
+      pdfm __FILE__, __method__, id: id, version: version
+      items = get_version(id, version)
+      unless items.nil?
+        release = new
+        release.items = items
+        release
+      end
+    end
+
+    def self.readall(id)
+      pdfm __FILE__, __method__, id: id
+    end
+
+    def self.update(id, version, data)
+      pdfm __FILE__, __method__, id: id, version: version
+      items = get_version(id, version)
+      unless items.nil?
+        release = new
+        release.items = items
+        data.each do |k, v|
+          send("#{k}=", v)
+        end
+        put_version(release.items)
+        release
+      end
+    end
+
+    def self.delete(id, version)
+      pdfm __FILE__, __method__, id: id, version: version
     end
   end
 end
