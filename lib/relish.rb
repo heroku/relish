@@ -23,9 +23,4 @@ module Relish
     pdfm __FILE__, __method__, id: id, version: version
     Release.update(id, version, data)
   end
-
-  def self.delete(id, version)
-    pdfm __FILE__, __method__, id: id, version: version
-    Release.delete(id, version)
-  end
 end

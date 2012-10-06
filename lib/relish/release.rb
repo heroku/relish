@@ -65,8 +65,8 @@ module Relish
       response.body['Item']
     end
 
-    def self.put_version(items)
-      response = db.put_item(relish_table_name, items, {Expected: {id: {Exists: true}, version: {Exists: true}}})
+    def self.put_version(id, version, items)
+      response = db.put_item(relish_table_name, items, {Expected: {id: {Value: {S: id}}, version: {Value: {N: version}}}})
       if response.status != 200
          raise('status: #{response.status}')
       end
@@ -85,7 +85,7 @@ module Relish
         release.version = (release.version.to_i + 1).to_s
       end
       data.each do |k, v|
-        send("#{k}=", v)
+        release.send("#{k}=", v)
       end
       put_current_version(release.items)
       release
@@ -112,15 +112,11 @@ module Relish
         release = new
         release.items = items
         data.each do |k, v|
-          send("#{k}=", v)
+          release.send("#{k}=", v)
         end
-        put_version(release.items)
+        put_version(id, version, release.items)
         release
       end
-    end
-
-    def self.delete(id, version)
-      pdfm __FILE__, __method__, id: id, version: version
     end
   end
 end
