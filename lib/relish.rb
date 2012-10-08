@@ -8,13 +8,12 @@ class Relish
 
   def self.conf(*attrs)
     attrs.each do |attr|
-      instance_eval "def #{attr}; @#{attr} ||= ENV['#{attr.upcase}'] || raise('missing configuration: #{attr.upcase}') end", __FILE__, __LINE__
+      instance_eval "def #{attr}; @#{attr} end", __FILE__, __LINE__
+      instance_eval "def #{attr}= value; @#{attr} = value end", __FILE__, __LINE__
     end
   end
 
-  conf :relish_aws_access_key,
-       :relish_aws_secret_key,
-       :relish_table_name
+  conf :aws_access_key, :aws_secret_key, :table_name
 
   def self.schema(attrs)
     attrs.each do |attr, type|
@@ -36,11 +35,11 @@ class Relish
          addons_json:    :S
 
   def self.db
-    @db ||= Fog::AWS::DynamoDB.new(aws_access_key_id: relish_aws_access_key, aws_secret_access_key: relish_aws_secret_key)
+    @db ||= Fog::AWS::DynamoDB.new(aws_access_key_id: aws_access_key, aws_secret_access_key: aws_secret_key)
   end
 
   def self.db_query_current_version(id)
-    response = db.query(relish_table_name, {S: id}, ConsistentRead: true, Limit: 1, ScanIndexForward: false)
+    response = db.query(table_name, {S: id}, ConsistentRead: true, Limit: 1, ScanIndexForward: false)
     if response.status != 200
       raise('status: #{response.status}')
     end
@@ -50,14 +49,14 @@ class Relish
   end
 
   def self.db_put_current_version(items)
-    response = db.put_item(relish_table_name, items, {Expected: {id: {Exists: false}, version: {Exists: false}}})
+    response = db.put_item(table_name, items, {Expected: {id: {Exists: false}, version: {Exists: false}}})
     if response.status != 200
       raise('status: #{response.status}')
     end
   end
 
   def self.db_get_version(id, version)
-    response = db.get_item(relish_table_name, {HashKeyElement: {S: id}, RangeKeyElement: {N: version}})
+    response = db.get_item(table_name, {HashKeyElement: {S: id}, RangeKeyElement: {N: version}})
     if response.status != 200
       raise('status: #{response.status}')
     end
@@ -65,14 +64,14 @@ class Relish
   end
 
   def self.db_put_version(id, version, items)
-    response = db.put_item(relish_table_name, items, {Expected: {id: {Value: {S: id}}, version: {Value: {N: version}}}})
+    response = db.put_item(table_name, items, {Expected: {id: {Value: {S: id}}, version: {Value: {N: version}}}})
     if response.status != 200
       raise('status: #{response.status}')
     end
   end
 
   def self.db_put(items)
-    response = db.put_item(relish_table_name, items)
+    response = db.put_item(table_name, items)
     if response.status != 200
       raise('status: #{response.status}')
     end
