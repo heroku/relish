@@ -5,9 +5,9 @@ A release manager.
 # Usage
 
 ```
-export RELISH_TABLE_NAME=releases
-export RELISH_AWS_ACCESS_KEY=ABC
-export RELISH_AWS_SECRET_KEY=xyz
+> Relish.table_name="releases"
+> Relish.aws_access_key="ABC"
+> Relish.aws_secret_key="xyz"
 ```
 
 ### Copy a Release
