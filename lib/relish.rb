@@ -22,24 +22,24 @@ class Relish
     end
   end
 
-  schema id:             :S,
-         version:        :N,
-         descr:          :S,
-         user_id:        :N,
-         slug_id:        :S,
-         slug_version:   :N,
-         stack:          :S,
-         language_pack:  :S,
-         env_json:       :S,
-         pstable_json:   :S,
-         addons_json:    :S
+  schema :id             => :S,
+         :version        => :N,
+         :descr          => :S,
+         :user_id        => :N,
+         :slug_id        => :S,
+         :slug_version   => :N,
+         :stack          => :S,
+         :language_pack  => :S,
+         :env_json       => :S,
+         :pstable_json   => :S,
+         :addons_json    => :S
 
   def self.db
-    @db ||= Fog::AWS::DynamoDB.new(aws_access_key_id: aws_access_key, aws_secret_access_key: aws_secret_key)
+    @db ||= Fog::AWS::DynamoDB.new(:aws_access_key_id => aws_access_key, :aws_secret_access_key => aws_secret_key)
   end
 
   def self.db_query_current_version(id)
-    response = db.query(table_name, {S: id}, ConsistentRead: true, Limit: 1, ScanIndexForward: false)
+    response = db.query(table_name, {:S => id}, :ConsistentRead => true, :Limit => 1, :ScanIndexForward => false)
     if response.status != 200
       raise('status: #{response.status}')
     end
@@ -49,14 +49,14 @@ class Relish
   end
 
   def self.db_put_current_version(items)
-    response = db.put_item(table_name, items, {Expected: {id: {Exists: false}, version: {Exists: false}}})
+    response = db.put_item(table_name, items, {:Expected => {:id => {:Exists => false}, :version => {:Exists => false}}})
     if response.status != 200
       raise('status: #{response.status}')
     end
   end
 
   def self.db_get_version(id, version)
-    response = db.get_item(table_name, {HashKeyElement: {S: id}, RangeKeyElement: {N: version}})
+    response = db.get_item(table_name, {:HashKeyElement => {:S => id}, :RangeKeyElement => {:N => version}})
     if response.status != 200
       raise('status: #{response.status}')
     end
@@ -64,7 +64,7 @@ class Relish
   end
 
   def self.db_put_version(id, version, items)
-    response = db.put_item(table_name, items, {Expected: {id: {Value: {S: id}}, version: {Value: {N: version}}}})
+    response = db.put_item(table_name, items, {:Expected => {:id => {:Value => {:S => id}}, :version => {:Value => {:N => version}}}})
     if response.status != 200
       raise('status: #{response.status}')
     end
@@ -78,7 +78,7 @@ class Relish
   end
 
   def self.copy(id, version, data)
-    pdfm __FILE__, __method__, id: id, version: version
+    pdfm __FILE__, __method__, :id => id, :version => version
     release = new
     release.items = {}
     release.id = id
@@ -91,7 +91,7 @@ class Relish
   end
 
   def self.create(id, data)
-    pdfm __FILE__, __method__, id: id
+    pdfm __FILE__, __method__, :id => id
     items = db_query_current_version(id)
     release = new
     if items.nil?
@@ -110,7 +110,7 @@ class Relish
   end
 
   def self.current(id)
-    pdfm __FILE__, __method__, id: id
+    pdfm __FILE__, __method__, :id => id
     items = db_query_current_version(id)
     unless items.nil?
       release = new
@@ -120,7 +120,7 @@ class Relish
   end
 
   def self.read(id, version)
-    pdfm __FILE__, __method__, id: id, version: version
+    pdfm __FILE__, __method__, :id => id, :version => version
     items = db_get_version(id, version)
     unless items.nil?
       release = new
@@ -130,11 +130,11 @@ class Relish
   end
 
   def self.dump(id)
-    pdfm __FILE__, __method__, id: id
+    pdfm __FILE__, __method__, :id => id
   end
 
   def self.update(id, version, data)
-    pdfm __FILE__, __method__, id: id, version: version
+    pdfm __FILE__, __method__, :id => id, :version => version
     items = db_get_version(id, version)
     unless items.nil?
       release = new
