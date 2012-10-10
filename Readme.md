@@ -5,9 +5,7 @@ A release manager.
 # Usage
 
 ```
-> Relish.table_name="releases"
-> Relish.aws_access_key="ABC"
-> Relish.aws_secret_key="xyz"
+> r = Relish.new("aws-access-key", "aws-secret-key", "table-name")
 ```
 
 ### Copy a Release
@@ -15,9 +13,9 @@ A release manager.
 Copies release data for id `abc` to version `123`:
 
 ```
-> rel = Relish.copy("abc", "123", slug_id: "slug-123", slug_version: "1")
+> rel = r.copy("abc", "123", slug_id: "slug-123", slug_version: "1")
 file=relish fn=copy id=abc version=123
-=> #<Relish: @items={"id"=>{"S"=>"abc"}, "version"=>{"N"=>"123"}, "slug_id"=>{"S"=>"slug-123"}, "slug_version"=>{"N"=>"1"}}>
+=> #<Relish::Release: @item={"id"=>{"S"=>"abc"}, "version"=>{"N"=>"123"}, "slug_id"=>{"S"=>"slug-123"}, "slug_version"=>{"N"=>"1"}}>
 > rel.id
 => "abc"
 > rel.version
@@ -34,9 +32,9 @@ file=relish fn=copy id=abc version=123
 Creates release with data for id `abc` - version will be `1` or current version + 1:
 
 ```
-> rel = Relish.create("abc", slug_id: "slug-456", slug_version: "2")
+> rel = r.create("abc", slug_id: "slug-456", slug_version: "2")
 file=relish fn=create id=abc
-=> #<Relish: @items={"id"=>{"S"=>"abc"}, "version"=>{"N"=>"124"}, "slug_version"=>{"N"=>"2"}, "slug_id"=>{"S"=>"slug-456"}}>
+=> #<Relish::Release: @item={"id"=>{"S"=>"abc"}, "version"=>{"N"=>"124"}, "slug_version"=>{"N"=>"2"}, "slug_id"=>{"S"=>"slug-456"}}>
 > rel.id
 => "abc"
 > rel.version
@@ -53,9 +51,9 @@ file=relish fn=create id=abc
 Returns the current release for id `abc`:
 
 ```
-> rel = Relish.current("abc")
+> rel = r.current("abc")
 file=relish fn=current id=abc
-=> #<Relish: @items={"id"=>{"S"=>"abc"}, "version"=>{"N"=>"124"}, "slug_version"=>{"N"=>"2"}, "slug_id"=>{"S"=>"slug-456"}}>
+=> #<Relish::Release: @item={"id"=>{"S"=>"abc"}, "version"=>{"N"=>"124"}, "slug_version"=>{"N"=>"2"}, "slug_id"=>{"S"=>"slug-456"}}>
 > rel.id
 => "abc"
 > rel.version
@@ -72,9 +70,9 @@ file=relish fn=current id=abc
 Returns version `123` for id `abc`:
 
 ```
-> rel = Relish.read("abc", "123")
+> rel = r.read("abc", "123")
 file=relish fn=read id=abc version=123
-=> #<Relish: @items={"id"=>{"S"=>"abc"}, "version"=>{"N"=>"123"}, "slug_version"=>{"N"=>"1"}, "slug_id"=>{"S"=>"slug-123"}}>
+=> #<Relish::Release: @item={"id"=>{"S"=>"abc"}, "version"=>{"N"=>"123"}, "slug_version"=>{"N"=>"1"}, "slug_id"=>{"S"=>"slug-123"}}>
 > rel.id
 => "abc"
 > rel.version
@@ -91,9 +89,9 @@ file=relish fn=read id=abc version=123
 Update release data for version `123` for id `abc`:
 
 ```
-> rel = Relish.update("abc", "123", slug_id: "slug-789")
+> rel = r.update("abc", "123", slug_id: "slug-789")
 file=relish fn=update id=abc version=123
-=> #<Relish: @items={"id"=>{"S"=>"abc"}, "version"=>{"N"=>"123"}, "slug_version"=>{"N"=>"1"}, "slug_id"=>{"S"=>"slug-789"}}>
+=> #<Relish::Release: @item={"id"=>{"S"=>"abc"}, "version"=>{"N"=>"123"}, "slug_version"=>{"N"=>"1"}, "slug_id"=>{"S"=>"slug-789"}}>
 > rel.id
 => "abc"
 > rel.version
@@ -110,7 +108,7 @@ file=relish fn=update id=abc version=123
 Dump release data for id `abc`:
 
 ```
-> rels = Relish.dump("abc", 2)
+> rels = r.dump("abc", 2)
 => [#<Relish: @item={"id"=>{"S"=>"abc"}, "version"=>{"N"=>"124"}, "slug_version"=>{"N"=>"2"}, "slug_id"=>{"S"=>"slug-456"}}>, #<Relish: @item={"id"=>{"S"=>"abc"}, "version"=>{"N"=>"123"}, "slug_version"=>{"N"=>"1"}, "slug_id"=>{"S"=>"slug-789"}}>]
 > rels[0].id
 => "abc"
