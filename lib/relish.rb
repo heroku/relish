@@ -153,3 +153,5 @@ class Relish
     end
   end
 end
+
+require 'relish/encryption_helper'
