@@ -2,7 +2,7 @@ require "fog"
 
 class Relish
 
-  attr_accessor :items
+  attr_accessor :item
 
   def self.conf(*attrs)
     attrs.each do |attr|
@@ -15,8 +15,8 @@ class Relish
 
   def self.schema(attrs)
     attrs.each do |attr, type|
-      class_eval "def #{attr}; @items['#{attr}']['#{type}'] if @items.key? '#{attr}' end", __FILE__, __LINE__
-      class_eval "def #{attr}= value; @items['#{attr}'] = {'#{type}' => value} end", __FILE__, __LINE__
+      class_eval "def #{attr}; @item['#{attr}']['#{type}'] if @item.key? '#{attr}' end", __FILE__, __LINE__
+      class_eval "def #{attr}= value; @item['#{attr}'] = {'#{type}' => value} end", __FILE__, __LINE__
     end
   end
 
@@ -46,8 +46,8 @@ class Relish
     end
   end
 
-  def self.db_put_current_version(items)
-    response = db.put_item(table_name, items, {:Expected => {:id => {:Exists => false}, :version => {:Exists => false}}})
+  def self.db_put_current_version(item)
+    response = db.put_item(table_name, item, {:Expected => {:id => {:Exists => false}, :version => {:Exists => false}}})
     if response.status != 200
       raise('status: #{response.status}')
     end
@@ -61,80 +61,94 @@ class Relish
     response.body['Item']
   end
 
-  def self.db_put_version(id, version, items)
-    response = db.put_item(table_name, items, {:Expected => {:id => {:Value => {:S => id}}, :version => {:Value => {:N => version}}}})
+  def self.db_put_version(id, version, item)
+    response = db.put_item(table_name, item, {:Expected => {:id => {:Value => {:S => id}}, :version => {:Value => {:N => version}}}})
     if response.status != 200
       raise('status: #{response.status}')
     end
   end
 
-  def self.db_put(items)
-    response = db.put_item(table_name, items)
+  def self.db_put(item)
+    response = db.put_item(table_name, item)
     if response.status != 200
       raise('status: #{response.status}')
     end
+  end
+
+  def self.db_query(id, limit)
+    response = db.query(table_name, {:S => id}, :ConsistentRead => true, :Limit => limit, :ScanIndexForward => false)
+    if response.status != 200
+      raise('status: #{response.status}')
+    end
+    response.body['Items']
   end
 
   def self.copy(id, version, data)
     release = new
-    release.items = {}
+    release.item = {}
     release.id = id
     release.version = version
     data.each do |k, v|
       release.send("#{k}=", v.to_s) unless v.nil?
     end
-    db_put(release.items)
+    db_put(release.item)
     release
   end
 
   def self.create(id, data)
-    items = db_query_current_version(id)
+    item = db_query_current_version(id)
     release = new
-    if items.nil?
-      release.items = {}
+    if item.nil?
+      release.item = {}
       release.id = id
       release.version = "1"
     else
-      release.items = items
+      release.item = item
       release.version = (release.version.to_i + 1).to_s
     end
     data.each do |k, v|
       release.send("#{k}=", v.to_s) unless v.nil?
     end
-    db_put_current_version(release.items)
+    db_put_current_version(release.item)
     release
   end
 
   def self.current(id)
-    items = db_query_current_version(id)
-    unless items.nil?
+    item = db_query_current_version(id)
+    unless item.nil?
       release = new
-      release.items = items
+      release.item = item
       release
     end
   end
 
   def self.read(id, version)
-    items = db_get_version(id, version)
-    unless items.nil?
+    item = db_get_version(id, version)
+    unless item.nil?
       release = new
-      release.items = items
+      release.item = item
       release
     end
   end
 
-  def self.dump(id)
+  def self.dump(id, limit)
+    items = db_query(id, limit)
+    items.map do |item|
+      release = new
+      release.item = item
+      release
+    end
   end
 
   def self.update(id, version, data)
-    items = db_get_version(id, version)
-    unless items.nil?
+    item = db_get_version(id, version)
+    unless item.nil?
       release = new
-      release.items = items
+      release.item = item
       data.each do |k, v|
         release.send("#{k}=", v.to_s) unless v.nil?
       end
-      db_put_version(id, version, release.items)
+      db_put_version(id, version, release.item)
       release
     end
   end
