@@ -28,9 +28,9 @@ class Relish
          :slug_version   => :N,
          :stack          => :S,
          :language_pack  => :S,
-         :env_json       => :S,
-         :pstable_json   => :S,
-         :addons_json    => :S
+         :env            => :S,
+         :pstable        => :S,
+         :addons         => :S
 
   def self.db
     @db ||= Fog::AWS::DynamoDB.new(:aws_access_key_id => aws_access_key, :aws_secret_access_key => aws_secret_key)
