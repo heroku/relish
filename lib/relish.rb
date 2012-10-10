@@ -38,8 +38,8 @@ class Relish
     release
   end
 
-  def current(id)
-    item = @db.query_current_version(id)
+  def current(id, *attrs)
+    item = @db.query_current_version(id, *attrs)
     unless item.nil?
       release = Release.new
       release.item = item
@@ -47,8 +47,8 @@ class Relish
     end
   end
 
-  def read(id, version)
-    item = @db.get_version(id, version)
+  def read(id, version, *attrs)
+    item = @db.get_version(id, version, *attrs)
     unless item.nil?
       release = Release.new
       release.item = item

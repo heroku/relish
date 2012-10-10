@@ -13,8 +13,9 @@ class Relish
       @db ||= Fog::AWS::DynamoDB.new(:aws_access_key_id => @aws_access_key, :aws_secret_access_key => @aws_secret_key)
     end
 
-    def query_current_version(id)
-      response = db.query(@table_name, {:S => id}, :ConsistentRead => true, :Limit => 1, :ScanIndexForward => false)
+    def query_current_version(id, *attrs)
+      opts = set_attrs_on_opts(attrs, :ConsistentRead => true, :Limit => 1, :ScanIndexForward => false)
+      response = db.query(@table_name, {:S => id}, opts)
       if response.status != 200
         raise('status: #{response.status}')
       end
@@ -30,8 +31,9 @@ class Relish
       end
     end
 
-    def get_version(id, version)
-      response = db.get_item(@table_name, {:HashKeyElement => {:S => id}, :RangeKeyElement => {:N => version}})
+    def get_version(id, version, *attrs)
+      opts = set_attrs_on_opts(attrs)
+      response = db.get_item(@table_name, {:HashKeyElement => {:S => id}, :RangeKeyElement => {:N => version}}, opts)
       if response.status != 200
         raise('status: #{response.status}')
       end
@@ -58,6 +60,14 @@ class Relish
         raise('status: #{response.status}')
       end
       response.body['Items']
+    end
+
+    private
+
+    def set_attrs_on_opts(attrs, opts = {})
+      attrs = Array(attrs)
+      opts[:AttributesToGet] = attrs unless attrs.empty?
+      opts
     end
   end
 end
