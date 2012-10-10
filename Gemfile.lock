@@ -2,8 +2,8 @@ PATH
   remote: .
   specs:
     relishable (0.7)
-      fernet (>= 1.4)
-      fog
+      fernet (~> 1.4)
+      fog (~> 1.6)
 
 GEM
   remote: http://rubygems.org/

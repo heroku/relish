@@ -52,8 +52,8 @@ class Relish
       end
     end
 
-    def query(id, limit)
-      response = db.query(@table_name, {:S => id}, :ConsistentRead => true, :Limit => limit, :ScanIndexForward => false)
+    def query(id, consistent, limit)
+      response = db.query(@table_name, {:S => id}, :ConsistentRead => consistent, :Limit => limit, :ScanIndexForward => false)
       if response.status != 200
         raise('status: #{response.status}')
       end

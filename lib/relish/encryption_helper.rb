@@ -6,8 +6,6 @@ class RelishDecryptionFailed < RuntimeError; end
 class Relish
   class EncryptionHelper
 
-    attr_reader :static_secret, :secrets
-
     def initialize(static_secret, secrets)
       @static_secret = static_secret
       @secrets = secrets

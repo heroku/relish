@@ -1,6 +1,6 @@
 require "relish/dynamo_helper"
-require "relish/encryption_helper"
 require "relish/release"
+require "relish/encryption_helper"
 
 class Relish
 
@@ -56,7 +56,7 @@ class Relish
     end
   end
 
-  def dump(id, limit=nil)
+  def dump(id, consistent=nil, limit=nil)
     items = @db.query(id, limit)
     items.map do |item|
       release = Release.new
