@@ -88,7 +88,7 @@ file=relish fn=read id=abc version=123
 
 ### Update Release
 
-Update release data for verion `123` for id `abc`:
+Update release data for version `123` for id `abc`:
 
 ```
 > rel = Relish.update("abc", "123", slug_id: "slug-789")
@@ -104,3 +104,28 @@ file=relish fn=update id=abc version=123
 => "1"
 >
 ```
+
+### Dump Releases
+
+Dump release data for id `abc`:
+
+```
+> rels = Relish.dump("abc", 2)
+=> [#<Relish: @item={"id"=>{"S"=>"abc"}, "version"=>{"N"=>"124"}, "slug_version"=>{"N"=>"2"}, "slug_id"=>{"S"=>"slug-456"}}>, #<Relish: @item={"id"=>{"S"=>"abc"}, "version"=>{"N"=>"123"}, "slug_version"=>{"N"=>"1"}, "slug_id"=>{"S"=>"slug-789"}}>]
+> rels[0].id
+=> "abc"
+> rels[0].version
+=> "124"
+> rels[0].slug_id
+=> "slug-456"
+> rels[0].slug_version
+=> "2"
+> rels[1].id
+=> "abc"
+> rels[1].version
+=> "123"
+> rels[1].slug_id
+=> "slug-789"
+> rels[1].slug_version
+=> "1"
+>

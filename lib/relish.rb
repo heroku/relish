@@ -131,7 +131,7 @@ class Relish
     end
   end
 
-  def self.dump(id, limit)
+  def self.dump(id, limit=nil)
     items = db_query(id, limit)
     items.map do |item|
       release = new
