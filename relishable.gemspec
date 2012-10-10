@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = "relishable"
   s.email = "mark.fine@gmail.com"
-  s.version = "0.4"
+  s.version = "0.5"
   s.description = "Release manager."
   s.summary = "releases"
   s.authors = ["Mark Fine"]
@@ -9,6 +9,5 @@ Gem::Specification.new do |s|
 
   s.files = Dir["lib/**/*.rb"] + Dir["Gemfile*"]
   s.require_paths = ["lib"]
-  s.add_dependency "press"
   s.add_dependency "fog"
 end

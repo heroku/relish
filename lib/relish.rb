@@ -1,8 +1,6 @@
-require "press"
 require "fog"
 
 class Relish
-  extend Press
 
   attr_accessor :items
 
@@ -78,20 +76,18 @@ class Relish
   end
 
   def self.copy(id, version, data)
-    pdfm __FILE__, __method__, :id => id, :version => version
     release = new
     release.items = {}
     release.id = id
     release.version = version
     data.each do |k, v|
-      release.send("#{k}=", v)
+      release.send("#{k}=", v.to_s) unless v.nil?
     end
     db_put(release.items)
     release
   end
 
   def self.create(id, data)
-    pdfm __FILE__, __method__, :id => id
     items = db_query_current_version(id)
     release = new
     if items.nil?
@@ -103,14 +99,13 @@ class Relish
       release.version = (release.version.to_i + 1).to_s
     end
     data.each do |k, v|
-      release.send("#{k}=", v)
+      release.send("#{k}=", v.to_s) unless v.nil?
     end
     db_put_current_version(release.items)
     release
   end
 
   def self.current(id)
-    pdfm __FILE__, __method__, :id => id
     items = db_query_current_version(id)
     unless items.nil?
       release = new
@@ -120,7 +115,6 @@ class Relish
   end
 
   def self.read(id, version)
-    pdfm __FILE__, __method__, :id => id, :version => version
     items = db_get_version(id, version)
     unless items.nil?
       release = new
@@ -130,17 +124,15 @@ class Relish
   end
 
   def self.dump(id)
-    pdfm __FILE__, __method__, :id => id
   end
 
   def self.update(id, version, data)
-    pdfm __FILE__, __method__, :id => id, :version => version
     items = db_get_version(id, version)
     unless items.nil?
       release = new
       release.items = items
       data.each do |k, v|
-        release.send("#{k}=", v)
+        release.send("#{k}=", v.to_s) unless v.nil?
       end
       db_put_version(id, version, release.items)
       release
