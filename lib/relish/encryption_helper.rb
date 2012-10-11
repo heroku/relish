@@ -49,14 +49,14 @@ class Relish
     def try_decrypt(secret, encrypted_token, hash_key)
       decrypt_key(secret, encrypted_token, hash_key)
     rescue OpenSSL::Cipher::CipherError => e
-      return false, {}
+      return false, nil
     end
 
     def decrypt_key(secret, encrypted_token, hash_key)
       verifier = Fernet.verifier(secret, encrypted_token)
       verifier.enforce_ttl = false
       unless verifier.valid?
-        return false, {}
+        return false, nil
       end
       [true, verifier.data[hash_key]]
     end
