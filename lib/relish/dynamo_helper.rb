@@ -16,9 +16,6 @@ class Relish
     def query_current_version(id, *attrs)
       opts = set_attrs_on_opts(attrs, :ConsistentRead => true, :Limit => 1, :ScanIndexForward => false)
       response = db.query(@table_name, {:S => id}, opts)
-      if response.status != 200
-        raise('status: #{response.status}')
-      end
       if response.body['Count'] == 1
         response.body['Items'].first
       end
@@ -26,39 +23,24 @@ class Relish
 
     def put_current_version(item)
       response = db.put_item(@table_name, item, {:Expected => {:id => {:Exists => false}, :version => {:Exists => false}}})
-      if response.status != 200
-        raise('status: #{response.status}')
-      end
     end
 
     def get_version(id, version, *attrs)
       opts = set_attrs_on_opts(attrs)
       response = db.get_item(@table_name, {:HashKeyElement => {:S => id}, :RangeKeyElement => {:N => version}}, opts)
-      if response.status != 200
-        raise('status: #{response.status}')
-      end
       response.body['Item']
     end
 
     def put_version(id, version, item)
       response = db.put_item(@table_name, item, {:Expected => {:id => {:Value => {:S => id}}, :version => {:Value => {:N => version}}}})
-      if response.status != 200
-        raise('status: #{response.status}')
-      end
     end
 
     def put(item)
       response = db.put_item(@table_name, item)
-      if response.status != 200
-        raise('status: #{response.status}')
-      end
     end
 
     def query(id, consistent, limit)
       response = db.query(@table_name, {:S => id}, :ConsistentRead => consistent, :Limit => limit, :ScanIndexForward => false)
-      if response.status != 200
-        raise('status: #{response.status}')
-      end
       response.body['Items']
     end
 
