@@ -62,5 +62,10 @@ class Relish
         gen.data = {hash_key => value}
       end
     end
+
+    def inspect
+      "#<Relish::EncryptionHelper @static_secret=[masked] @secrets=[masked]>"
+    end
+    alias to_s inspect
   end
 end
