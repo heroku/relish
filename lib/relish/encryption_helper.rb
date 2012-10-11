@@ -38,7 +38,7 @@ class Relish
 
     def try_decrypt_with_index(encrypted_token)
       hmac_secrets.each_with_index do |secret, i|
-        success, env = try_decrypt(secret, encrypted_token, "env")
+        success, env = try_decrypt_key(secret, encrypted_token, "env")
         if success
           return env, i
         end
@@ -46,19 +46,15 @@ class Relish
       raise RelishDecryptionFailed
     end
 
-    def try_decrypt(secret, encrypted_token, hash_key)
-      decrypt_key(secret, encrypted_token, hash_key)
-    rescue OpenSSL::Cipher::CipherError => e
-      return false, nil
-    end
-
-    def decrypt_key(secret, encrypted_token, hash_key)
+    def try_decrypt_key(secret, encrypted_token, hash_key)
       verifier = Fernet.verifier(secret, encrypted_token)
       verifier.enforce_ttl = false
       unless verifier.valid?
         return false, nil
       end
       [true, verifier.data[hash_key]]
+    rescue OpenSSL::Cipher::CipherError => e
+      return false, nil
     end
 
     def encrypt_key_with_secret(hash_key, value, secret)
