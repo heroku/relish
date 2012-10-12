@@ -14,8 +14,7 @@ class Relish
     end
 
     def query_current_version(id, *attrs)
-      opts = set_attrs_on_opts(attrs, :ConsistentRead => true, :Limit => 1, :ScanIndexForward => false)
-      response = db.query(@table_name, {:S => id}, opts)
+      response = db.query(@table_name, {:S => id}, attrs_to_get(attrs).merge(:ConsistentRead => true, :Limit => 1, :ScanIndexForward => false))
       if response.body['Count'] == 1
         response.body['Items'].first
       end
@@ -26,8 +25,7 @@ class Relish
     end
 
     def get_version(id, version, *attrs)
-      opts = set_attrs_on_opts(attrs)
-      response = db.get_item(@table_name, {:HashKeyElement => {:S => id}, :RangeKeyElement => {:N => version}}, opts)
+      response = db.get_item(@table_name, {:HashKeyElement => {:S => id}, :RangeKeyElement => {:N => version}}, attrs_to_get(attrs).merge(:ConsistentRead => true))
       response.body['Item']
     end
 
@@ -46,10 +44,8 @@ class Relish
 
     private
 
-    def set_attrs_on_opts(attrs, opts = {})
-      attrs = Array(attrs)
-      opts[:AttributesToGet] = attrs unless attrs.empty?
-      opts
+    def attrs_to_get(attrs)
+      attrs.empty? ? {} : {:AttributesToGet => attrs}
     end
   end
 end
