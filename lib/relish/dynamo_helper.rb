@@ -42,6 +42,10 @@ class Relish
       response.body['Items']
     end
 
+    def to_s
+      "#<Relish::DynamoHelper>"
+    end
+
     private
 
     def attrs_to_get(attrs)

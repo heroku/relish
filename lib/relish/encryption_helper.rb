@@ -34,6 +34,10 @@ class Relish
       raise RelishDecryptionFailed
     end
 
+    def to_s
+      "#<Relish::EncryptionHelper>"
+    end
+
     protected
 
     def hmac_secrets
@@ -48,10 +52,5 @@ class Relish
       end
     rescue OpenSSL::Cipher::CipherError
     end
-
-    def inspect
-      "#<Relish::EncryptionHelper>"
-    end
-    alias to_s inspect
   end
 end
