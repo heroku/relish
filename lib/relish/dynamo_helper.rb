@@ -22,7 +22,7 @@ class Relish
     end
 
     def put_current_version(item)
-      response = db.put_item(@table_name, item, {:Expected => {:id => {:Exists => false}, :version => {:Exists => false}}})
+      db.put_item(@table_name, item, {:Expected => {:id => {:Exists => false}, :version => {:Exists => false}}})
     end
 
     def get_version(id, version, *attrs)
@@ -32,11 +32,11 @@ class Relish
     end
 
     def put_version(id, version, item)
-      response = db.put_item(@table_name, item, {:Expected => {:id => {:Value => {:S => id}}, :version => {:Value => {:N => version}}}})
+      db.put_item(@table_name, item, {:Expected => {:id => {:Value => {:S => id}}, :version => {:Value => {:N => version}}}})
     end
 
     def put(item)
-      response = db.put_item(@table_name, item)
+      db.put_item(@table_name, item)
     end
 
     def query(id, consistent, limit)
