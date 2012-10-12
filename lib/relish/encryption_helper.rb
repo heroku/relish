@@ -34,9 +34,11 @@ class Relish
       raise RelishDecryptionFailed
     end
 
-    def to_s
+    def inspect
       "#<Relish::EncryptionHelper>"
     end
+
+    alias to_s inspect
 
     protected
 

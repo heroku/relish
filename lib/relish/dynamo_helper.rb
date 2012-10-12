@@ -42,11 +42,13 @@ class Relish
       response.body['Items']
     end
 
-    def to_s
+    def inspect
       "#<Relish::DynamoHelper>"
     end
 
-    private
+    alias to_s inspect
+
+    protected
 
     def attrs_to_get(attrs)
       attrs.empty? ? {} : {:AttributesToGet => attrs}
