@@ -12,20 +12,26 @@ class Relish
       @secrets = secrets
     end
 
-    def encrypt_env(env)
-      encrypt_key_with_secret("env", env, hmac_secrets.first)
-    end
-
-    def decrypt_env(encrypted_token)
-      try_decrypt_with_index(encrypted_token)[0]
-    end
-
-    def upgrade_env_encryption(encrypted_token)
-      if encrypted_token.nil? || encrypted_token == ""
-        return false, encrypted_token
+    def encrypt(key, value)
+      Fernet.generate(hmac_secrets.first) do |gen|
+        gen.data = {key => value}
       end
-      env, i = try_decrypt_with_index(encrypted_token)
-      i == 0 ? [false, encrypted_token] : [true, encrypt_env(env)]
+    end
+
+    def decrypt(key, token)
+      hmac_secrets.each do |secret|
+        if verifier = verifier(secret, token)
+          return verifier.data[key] if verifier.valid?
+        end
+      end
+      raise RelishDecryptionFailed
+    end
+
+    def upgrade(key, token)
+      if verifier = verifier(hmac_secrets.first, token)
+        return encrypt(key, verifier.data[key]) if verifier.valid?
+      end
+      raise RelishDecryptionFailed
     end
 
     protected
@@ -36,35 +42,15 @@ class Relish
       end
     end
 
-    def try_decrypt_with_index(encrypted_token)
-      hmac_secrets.each_with_index do |secret, i|
-        success, env = try_decrypt_key(secret, encrypted_token, "env")
-        if success
-          return env, i
-        end
+    def verifier(secret, token)
+      Fernet.verifier(secret, token).tap do |verifier|
+        verifier.enforce_ttl = false
       end
-      raise RelishDecryptionFailed
-    end
-
-    def try_decrypt_key(secret, encrypted_token, hash_key)
-      verifier = Fernet.verifier(secret, encrypted_token)
-      verifier.enforce_ttl = false
-      unless verifier.valid?
-        return false, nil
-      end
-      [true, verifier.data[hash_key]]
-    rescue OpenSSL::Cipher::CipherError => e
-      return false, nil
-    end
-
-    def encrypt_key_with_secret(hash_key, value, secret)
-      Fernet.generate(secret) do |gen|
-        gen.data = {hash_key => value}
-      end
+    rescue OpenSSL::Cipher::CipherError
     end
 
     def inspect
-      "#<Relish::EncryptionHelper @static_secret=[masked] @secrets=[masked]>"
+      "#<Relish::EncryptionHelper>"
     end
     alias to_s inspect
   end
