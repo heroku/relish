@@ -57,7 +57,7 @@ class Relish
   end
 
   def dump(id, consistent=nil, limit=nil)
-    items = @db.query(id, limit)
+    items = @db.query(id, consistent, limit)
     items.map do |item|
       Release.new.tap do |release|
         release.item = item
