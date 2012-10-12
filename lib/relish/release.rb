@@ -10,16 +10,18 @@ class Relish
       end
     end
 
-    schema :id             => :S,
-           :version        => :N,
-           :descr          => :S,
-           :user_id        => :N,
-           :slug_id        => :S,
-           :slug_version   => :N,
-           :stack          => :S,
-           :language_pack  => :S,
-           :env            => :S,
-           :pstable        => :S,
-           :addons         => :S
+    schema :id                => :S,
+           :version           => :N,
+           :descr             => :S,
+           :user_id           => :N,
+           :slug_id           => :S,
+           :slug_version      => :N,
+           :stack             => :S,
+           :language_pack     => :S,
+           :heroku_log_token  => :S,
+           :log_token         => :S,
+           :env               => :S,
+           :pstable           => :S,
+           :addons            => :S
   end
 end
