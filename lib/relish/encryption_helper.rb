@@ -51,6 +51,7 @@ class Relish
     def verifier(secret, token)
       Fernet.verifier(secret, token).tap do |verifier|
         verifier.enforce_ttl = false
+        verifier.verify_token(token)
       end
     rescue OpenSSL::Cipher::CipherError
     end
