@@ -10,11 +10,11 @@ class Relish
     end
 
     def db
-      @db ||= Fog::AWS::S3.new(:aws_access_key_id => @aws_access_key, :aws_secret_access_key => @aws_secret_key)
+      @db ||= Fog::Storage::AWS.new(:aws_access_key_id => @aws_access_key, :aws_secret_access_key => @aws_secret_key)
     end
 
-    def signed_url(name, expiry)
-      db.directories.new(:key => @bucket_name).files.new(:key => name).url(expiry)
+    def signed_url(name, expires)
+      db.get_object_https_url(@bucket_name, name, expires)
     end
   end
 end
