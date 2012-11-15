@@ -1,6 +1,7 @@
 require "relish/dynamo_helper"
-require "relish/release"
+require "relish/s3_helper"
 require "relish/encryption_helper"
+require "relish/release"
 
 class Relish
 
