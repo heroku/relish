@@ -14,6 +14,7 @@ class Relish
            :version           => :N,
            :descr             => :S,
            :user_id           => :N,
+           :route_id          => :S,
            :slug_id           => :S,
            :slug_version      => :N,
            :stack             => :S,
