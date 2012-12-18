@@ -1,4 +1,5 @@
 require "relish/dynamo_helper"
+require "relish/cloudfront_helper"
 require "relish/s3_helper"
 require "relish/encryption_helper"
 require "relish/release"
