@@ -12,6 +12,7 @@ class Relish
 
     schema :id                => :S,
            :version           => :N,
+           :name              => :S,
            :descr             => :S,
            :user_id           => :N,
            :route_id          => :S,
