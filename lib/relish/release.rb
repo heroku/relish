@@ -24,6 +24,7 @@ class Relish
            :log_token         => :S,
            :env               => :S,
            :pstable           => :S,
-           :addons            => :S
+           :addons            => :S,
+           :uuid              => :S
   end
 end
