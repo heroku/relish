@@ -30,6 +30,10 @@ class Relish
       response.body['Item']
     end
 
+    def delete_version(id, version)
+      db.delete_item(@table_name, {:HashKeyElement => {:S => id}, :RangeKeyElement => {:N => version}})
+    end
+
     def put_version(id, version, item)
       db.put_item(@table_name, item, {:Expected => {:id => {:Value => {:S => id}}, :version => {:Value => {:N => version}}}})
     end

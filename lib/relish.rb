@@ -79,4 +79,8 @@ class Relish
       end
     end
   end
+
+  def delete(id, version)
+    @db.delete_version(id, version)
+  end
 end

@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = "relishable"
   s.email = "mark.fine@gmail.com"
-  s.version = "0.22"
+  s.version = "0.23"
   s.description = "Release manager."
   s.summary = "releases"
   s.authors = ["Mark Fine", "Blake Gentry"]
