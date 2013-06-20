@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = "relishable-multijson"
   s.email = "mark.fine@gmail.com"
-  s.version = "0.23"
+  s.version = "0.24"
   s.description = "Release manager."
   s.summary = "releases"
   s.authors = ["Mark Fine", "Blake Gentry"]

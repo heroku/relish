@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    relishable-multijson (0.23)
+    relishable-multijson (0.24)
       fernet-multijson (~> 1.6)
       fog (~> 1.8)
 
