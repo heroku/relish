@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name = "relishable"
+  s.name = "relishable-multijson"
   s.email = "mark.fine@gmail.com"
   s.version = "0.23"
   s.description = "Release manager."
@@ -10,5 +10,5 @@ Gem::Specification.new do |s|
   s.files = Dir["lib/**/*.rb"] + Dir["Gemfile*"]
   s.require_paths = ["lib"]
   s.add_dependency "fog", "~> 1.8"
-  s.add_dependency "fernet", "~> 1.6"
+  s.add_dependency "fernet-multijson", "~> 1.6"
 end

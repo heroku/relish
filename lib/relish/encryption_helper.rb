@@ -12,16 +12,16 @@ class Relish
       @secrets = secrets
     end
 
-    def encrypt(key, value)
+    def encrypt(value)
       Fernet.generate(hmac_secrets.first) do |gen|
-        gen.data = {key => value}
+        gen.data = value
       end
     end
 
-    def decrypt(key, token)
+    def decrypt(token)
       hmac_secrets.each do |secret|
         if verifier = verifier(secret, token)
-          return verifier.data[key] if verifier.valid?
+          return verifier.data if verifier.valid?
         end
       end
       raise RelishDecryptionFailed
