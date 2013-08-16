@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = "relishable"
   s.email = "mark.fine@gmail.com"
-  s.version = "0.24"
+  s.version = "0.25"
   s.description = "Release manager."
   s.summary = "releases"
   s.authors = ["Mark Fine", "Blake Gentry"]
@@ -10,5 +10,5 @@ Gem::Specification.new do |s|
   s.files = Dir["lib/**/*.rb"] + Dir["Gemfile*"]
   s.require_paths = ["lib"]
   s.add_dependency "fog", "~> 1.8"
-  s.add_dependency "fernet", "~> 1.6"
+  s.add_dependency "fernet_multi_json", "~> 1.6"
 end
