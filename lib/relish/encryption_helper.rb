@@ -1,5 +1,5 @@
 require "relish/release"
-require "fernet"
+require "fernet/legacy"
 require "openssl"
 
 class RelishDecryptionFailed < RuntimeError; end
@@ -13,7 +13,7 @@ class Relish
     end
 
     def encrypt(key, value)
-      Fernet.generate(hmac_secrets.first) do |gen|
+      Fernet::Legacy.generate(hmac_secrets.first) do |gen|
         gen.data = {key => value}
       end
     end
@@ -49,7 +49,7 @@ class Relish
     end
 
     def verifier(secret, token)
-      Fernet.verifier(secret, token).tap do |verifier|
+      Fernet::Legacy.verifier(secret, token).tap do |verifier|
         verifier.enforce_ttl = false
         verifier.verify_token(token)
       end
