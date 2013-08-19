@@ -9,6 +9,6 @@ Gem::Specification.new do |s|
 
   s.files = Dir["lib/**/*.rb"] + Dir["Gemfile*"]
   s.require_paths = ["lib"]
-  s.add_dependency "fog", "~> 1.8"
-  s.add_dependency "legacy-fernet", "1.6.3"
+  s.add_dependency "fog"
+  s.add_dependency "legacy-fernet"
 end
