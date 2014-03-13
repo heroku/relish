@@ -11,4 +11,5 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.add_dependency "fog"
   s.add_dependency "legacy-fernet"
+  s.add_development_dependency "webmock",    "~> 1.17.4"
 end
