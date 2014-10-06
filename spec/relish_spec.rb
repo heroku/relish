@@ -20,10 +20,23 @@ describe Relish do
       end
     end
 
-    it "retries on errors" do
-      stub_request(:any, @dynamo_url).to_return(status: 503)
-      @relish.copy("1234", "1", { name: "foobar" })
-      assert_requested(:post, @dynamo_url, times: 3)
+    describe "on errors" do
+      before do
+        stub_request(:any, @dynamo_url).to_return(status: 503)
+      end
+
+      it "retries on errors" do
+        @relish.copy("1234", "1", { name: "foobar" })
+        assert_requested(:post, @dynamo_url, times: 3)
+      end
+
+      it "calls a custom proc" do
+        @error = nil
+        @relish.on_error { |e| @error = e }
+        @relish.copy("1234", "1", { name: "foobar" })
+        assert_equal Excon::Errors::ServiceUnavailable, @error.class
+      end
     end
+
   end
 end
