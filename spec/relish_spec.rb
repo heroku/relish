@@ -19,5 +19,11 @@ describe Relish do
           item["name"]    == { "S" => "foobar" }
       end
     end
+
+    it "retries on errors" do
+      stub_request(:any, @dynamo_url).to_return(status: 503)
+      @relish.copy("1234", "1", { name: "foobar" })
+      assert_requested(:post, @dynamo_url, times: 3)
+    end
   end
 end
