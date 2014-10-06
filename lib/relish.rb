@@ -7,7 +7,8 @@ require "relish/release"
 class Relish
 
   def initialize(*args)
-    @db = DynamoHelper.new(*args)
+    @db    = DynamoHelper.new(*args)
+    @tries = 3
   end
 
   def copy(id, version, data)
@@ -99,11 +100,8 @@ class Relish
   end
 
   def rescue_dynamodb_error
-    @tries = 3
-    begin
-      yield
-    rescue => e
-      retry unless (@tries -= 1).zero?
-    end
+    yield
+  rescue => e
+    retry unless (@tries -= 1).zero?
   end
 end
