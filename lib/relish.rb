@@ -98,4 +98,12 @@ class Relish
     end
   end
 
+  def rescue_dynamodb_error
+    tries = 3
+    begin
+      yield
+    rescue => e
+      retry unless (@tries -= 1).zero?
+    end
+  end
 end
