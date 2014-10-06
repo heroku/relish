@@ -11,4 +11,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.add_dependency "fog"
   s.add_dependency "legacy-fernet"
+  s.add_development_dependency "rake",    "> 0"
+  s.add_development_dependency "rspec",   "~> 3.1.0"
+  s.add_development_dependency "webmock", "~> 1.19.0"
 end
