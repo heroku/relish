@@ -95,7 +95,7 @@ class Relish
 
   def delete(id, version)
     rescue_dynamodb_error do
-        @db.delete_version(id, version)
+      @db.delete_version(id, version)
     end
   end
 
