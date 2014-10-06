@@ -1,8 +1,4 @@
-task default: :test
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec)
 
-task :test do
-  require "rspec"
-  code = RSpec::Core::Runner.run(
-    ["spec/"], $stderr, $stdout)
-  exit(code) unless code == 0
-end
+task default: :spec
