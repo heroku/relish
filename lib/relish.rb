@@ -113,7 +113,7 @@ class Relish
       else
         unless @error_handler.nil?
           @error_handler.call(e)
-          end
+        end
         retry
       end
     end
