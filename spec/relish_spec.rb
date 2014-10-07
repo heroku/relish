@@ -26,14 +26,18 @@ describe Relish do
       end
 
       it "retries the API calls" do
-        @relish.copy("1234", "1", { name: "foobar" })
+        assert_raise Excon::Errors::ServiceUnavailable do
+          @relish.copy("1234", "1", { name: "foobar" })
+        end
         assert_requested(:post, @dynamo_url, times: 3)
       end
 
       it "calls a custom proc so consumers can log/measure Dynamo errors" do
         @error = nil
-        @relish.on_error { |e| @error = e }
-        @relish.copy("1234", "1", { name: "foobar" })
+        @relish.set_error_handler { |e| @error = e }
+        assert_raise Excon::Errors::ServiceUnavailable do
+          @relish.copy("1234", "1", { name: "foobar" })
+        end
         assert_equal Excon::Errors::ServiceUnavailable, @error.class
       end
     end

@@ -52,15 +52,5 @@ class Relish
     end
 
     alias to_s inspect
-
-    private 
-    
-    def rescue_dynamodb_error
-      yield 
-    rescue => e
-      retry || =3
-      retry unless (tries -= 1).zero?
-    end
-    
   end
 end
