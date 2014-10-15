@@ -32,15 +32,19 @@ describe Relish do
         assert_requested(:post, @dynamo_url, times: 3)
       end
 
-      it "calls a custom proc so consumers can log/measure Dynamo errors" do
+      it "calls a custom proc so consumers can log/measure Dynamo errors with retries" do
         @error = nil
-        @relish.set_error_handler { |e| @error = e }
+        @retries = []
+        @relish.set_error_handler do |e, r|
+          @error = e
+          @retries << r
+        end
         assert_raise Excon::Errors::ServiceUnavailable do
           @relish.copy("1234", "1", { name: "foobar" })
         end
         assert_equal Excon::Errors::ServiceUnavailable, @error.class
+        assert_equal [true, true, false], @retries
       end
     end
-
   end
 end

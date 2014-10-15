@@ -99,8 +99,8 @@ class Relish
     end
   end
 
-  def set_error_handler(&block)
-    @error_handler = block
+  def set_error_handler(&blk)
+    @error_handler = blk
   end
 
   def rescue_dynamodb_error
@@ -108,14 +108,18 @@ class Relish
     begin
       yield
     rescue => e
-      if (tries -= 1).zero?
-        raise
-      else
-        unless @error_handler.nil?
-          @error_handler.call(e)
-        end
-        retry
+      retries = ((tries -= 1) > 0)
+
+      unless @error_handler.nil?
+        @error_handler.call(e, retries)
       end
+
+      if retries
+        retry
+      else
+        raise
+      end
+
     end
   end
 end
