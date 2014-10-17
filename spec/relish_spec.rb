@@ -19,5 +19,32 @@ describe Relish do
           item["name"]    == { "S" => "foobar" }
       end
     end
+
+    describe "on errors" do
+      before do
+        stub_request(:any, @dynamo_url).to_return(status: 503)
+      end
+
+      it "retries the API calls" do
+        assert_raise Excon::Errors::ServiceUnavailable do
+          @relish.copy("1234", "1", { name: "foobar" })
+        end
+        assert_requested(:post, @dynamo_url, times: 3)
+      end
+
+      it "calls a custom proc so consumers can log/measure Dynamo errors with retries" do
+        @error = nil
+        @retries = []
+        @relish.set_error_handler do |e, r|
+          @error = e
+          @retries << r
+        end
+        assert_raise Excon::Errors::ServiceUnavailable do
+          @relish.copy("1234", "1", { name: "foobar" })
+        end
+        assert_equal Excon::Errors::ServiceUnavailable, @error.class
+        assert_equal [true, true, false], @retries
+      end
+    end
   end
 end
