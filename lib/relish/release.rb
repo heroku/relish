@@ -22,7 +22,7 @@ class Relish
            :stack                => :S,
            :language_pack        => :S,
            :app_name             => :S,
-           :git_sha              => :S,
+           :commit               => :S,
            :heroku_log_input_url => :S,
            :log_input_url        => :S,
            :heroku_log_token     => :S,
