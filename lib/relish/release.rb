@@ -29,6 +29,7 @@ class Relish
            :env                  => :S,
            :pstable              => :S,
            :addons               => :S,
-           :uuid                 => :S
+           :uuid                 => :S,
+           :app_uuid             => :S
   end
 end
