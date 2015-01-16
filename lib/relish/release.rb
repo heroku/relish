@@ -21,6 +21,7 @@ class Relish
            :slug_version         => :N,
            :stack                => :S,
            :language_pack        => :S,
+           :commit               => :S,
            :heroku_log_input_url => :S,
            :log_input_url        => :S,
            :heroku_log_token     => :S,
@@ -28,6 +29,7 @@ class Relish
            :env                  => :S,
            :pstable              => :S,
            :addons               => :S,
-           :uuid                 => :S
+           :uuid                 => :S,
+           :app_uuid             => :S
   end
 end
