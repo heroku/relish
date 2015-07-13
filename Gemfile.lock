@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     relishable (0.32)
-      fog-aws (~> 0.7.0)
+      fog (~> 1.23.0)
       legacy-fernet (~> 1.6.3)
 
 GEM
@@ -13,12 +13,18 @@ GEM
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     diff-lcs (1.2.5)
-    excon (0.45.3)
-    fog-aws (0.7.3)
-      fog-core (~> 1.27)
-      fog-json (~> 1.0)
-      fog-xml (~> 0.1)
-      ipaddress (~> 0.8)
+    excon (0.45.4)
+    fog (1.23.0)
+      fog-brightbox
+      fog-core (~> 1.23)
+      fog-json
+      fog-softlayer
+      ipaddress (~> 0.5)
+      nokogiri (~> 1.5, >= 1.5.11)
+    fog-brightbox (0.7.2)
+      fog-core (~> 1.22)
+      fog-json
+      inflecto (~> 0.0.2)
     fog-core (1.32.0)
       builder
       excon (~> 0.45)
@@ -29,10 +35,11 @@ GEM
     fog-json (1.0.2)
       fog-core (~> 1.0)
       multi_json (~> 1.10)
-    fog-xml (0.1.2)
+    fog-softlayer (0.4.7)
       fog-core
-      nokogiri (~> 1.5, >= 1.5.11)
+      fog-json
     formatador (0.2.5)
+    inflecto (0.0.2)
     ipaddress (0.8.0)
     legacy-fernet (1.6.3)
       multi_json

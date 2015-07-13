@@ -1,4 +1,4 @@
-require "fog/aws"
+require "fog"
 
 class Relish
   class DynamoHelper
