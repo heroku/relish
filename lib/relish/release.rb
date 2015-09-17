@@ -32,6 +32,6 @@ class Relish
            :uuid                 => :S,
            :app_uuid             => :S,
            :app_name             => :S,
-           :slug_type            => :S
+           :slug_format          => :S
   end
 end
