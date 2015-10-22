@@ -31,6 +31,7 @@ class Relish
            :addons               => :S,
            :uuid                 => :S,
            :app_uuid             => :S,
-           :app_name             => :S
+           :app_name             => :S,
+           :format               => :S
   end
 end
