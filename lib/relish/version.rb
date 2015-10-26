@@ -1,5 +1,5 @@
 class Relish
-  VERSION = "0.33"
+  VERSION = "0.34"
 end
 
   
