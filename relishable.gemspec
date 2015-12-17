@@ -16,5 +16,6 @@ Gem::Specification.new do |s|
   s.add_dependency "legacy-fernet", "~> 1.6.3"
   s.add_development_dependency "rake",    "> 0"
   s.add_development_dependency "rspec",   "~> 3.1.0"
+  s.add_development_dependency "test-unit"
   s.add_development_dependency "webmock", "~> 1.19.0"
 end
