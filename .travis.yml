@@ -1,7 +1,6 @@
 language: ruby
 rvm:
-  - 2.1.2
-  - 1.9.3
+  - 2.2.4
 cache: bundler
 script: bundle exec rake
 sudo: false
