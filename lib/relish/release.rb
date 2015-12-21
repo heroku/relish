@@ -18,6 +18,7 @@ class Relish
            :route_id             => :S,
            :slug_uuid            => :S,
            :slug_id              => :S,
+           :slug_checksum        => :S,
            :slug_version         => :N,
            :stack                => :S,
            :language_pack        => :S,
