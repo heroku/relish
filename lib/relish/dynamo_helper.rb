@@ -1,4 +1,4 @@
-require "fog"
+require "fog/aws"
 
 class Relish
   class DynamoHelper
@@ -15,8 +15,34 @@ class Relish
     end
 
     def query_current_version(id, *attrs)
-      response = db.query(@table_name, {:S => id}, :ConsistentRead => true, :Limit => 1, :ScanIndexForward => false)
-      if response.body['Count'] == 1
+      response = db.query(@table_name,
+                          :KeyConditionExpression => 'id = :id AND version > :version',
+                          :FilterExpression => 'draft <> :isDraft',
+                          :ExpressionAttributeValues => {
+                            ':id' => {:S => id},
+                            ':version' => {:N => '0'},
+                            ':isDraft' => {:BOOL => true}
+                          },
+                          :ConsistentRead => true,
+                          :ScanIndexForward => false)
+      count = response.body['Count'] || 0
+      if count > 0
+        response.body['Items'].first
+      end
+    end
+
+    def query_latest_version(id, *attrs)
+      response = db.query(@table_name,
+                          :KeyConditionExpression => 'id = :id AND version > :version',
+                          :ExpressionAttributeValues => {
+                            ':id' => {:S => id},
+                            ':version' => {:N => '0'},
+                          },
+                          :Limit => 1,
+                          :ConsistentRead => true,
+                          :ScanIndexForward => false)
+      count = response.body['Count'] || 0
+      if count > 0
         response.body['Items'].first
       end
     end
@@ -26,16 +52,21 @@ class Relish
     end
 
     def get_version(id, version, *attrs)
-      response = db.get_item(@table_name, {:HashKeyElement => {:S => id}, :RangeKeyElement => {:N => version}}, :ConsistentRead => true)
+      response = db.get_item(@table_name, {:id => {:S => id}, :version => {:N => version}}, :ConsistentRead => true)
       response.body['Item']
     end
 
     def delete_version(id, version)
-      db.delete_item(@table_name, {:HashKeyElement => {:S => id}, :RangeKeyElement => {:N => version}})
+      db.delete_item(@table_name, id: {:S => id}, :version => {:N => version})
     end
 
     def put_version(id, version, item)
-      db.put_item(@table_name, item, {:Expected => {:id => {:Value => {:S => id}}, :version => {:Value => {:N => version}}}})
+      db.put_item(@table_name, item,
+                  :ConditionExpression => 'id <> :id AND version <> :version',
+                  :ExpressionAttributeValues => {
+                    ':id' => {:S => id},
+                    ':version' => {:N => version}
+                  })
     end
 
     def put(item)
@@ -43,7 +74,15 @@ class Relish
     end
 
     def query(id, consistent, limit)
-      response = db.query(@table_name, {:S => id}, :ConsistentRead => consistent, :Limit => limit, :ScanIndexForward => false)
+      response = db.query(@table_name,
+                          :KeyConditionExpression => 'id = :id AND version > :version',
+                          :ExpressionAttributeValues => {
+                            ':id' => {:S => id},
+                            ':version' => {:N => '0'}
+                          },
+                          :ConsistentRead => consistent,
+                          :Limit => limit,
+                          :ScanIndexForward => false)
       response.body['Items']
     end
 

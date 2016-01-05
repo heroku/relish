@@ -26,7 +26,7 @@ class Relish
 
   def create(id, data)
     rescue_dynamodb_error do
-      item = @db.query_current_version(id)
+      item = @db.query_latest_version(id)
       Release.new.tap do |release|
         if item.nil?
           release.item = {}
@@ -76,7 +76,7 @@ class Relish
       end
     end
   end
-    
+
   def update(id, version, data)
     rescue_dynamodb_error do
       item = @db.get_version(id, version)

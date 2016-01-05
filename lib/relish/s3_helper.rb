@@ -1,4 +1,4 @@
-require "fog"
+require "fog/aws"
 
 class Relish
   class S3Helper

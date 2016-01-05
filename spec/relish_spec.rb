@@ -16,7 +16,16 @@ describe Relish do
         params["TableName"] == "table" &&
           item["id"]      == { "S" => "1234" } &&
           item["version"] == { "N" => "1" } &&
-          item["name"]    == { "S" => "foobar" }
+          item["name"]    == { "S" => "foobar" } &&
+          item["draft"]   == nil
+      end
+    end
+
+    it "creates a draft release" do
+      @relish.copy("1234", "1", { name: "foobar", draft: true })
+      assert_requested(:post, @dynamo_url) do |req|
+        params = MultiJson.decode(req.body)
+        params["Item"]["draft"] == { "BOOL" => 'true' }
       end
     end
 
@@ -44,6 +53,23 @@ describe Relish do
         end
         assert_equal Excon::Errors::ServiceUnavailable, @error.class
         assert_equal [true, true, false], @retries
+      end
+    end
+  end
+
+  describe "#current" do
+    it "returns the current release" do
+      @relish.current("1234")
+
+      assert_requested(:post, @dynamo_url) do |req|
+        params = MultiJson.decode(req.body)
+        params['KeyConditionExpression'] == 'id = :id AND version > :version' &&
+          params['FilterExpression'] == 'draft <> :isDraft' &&
+          params['ExpressionAttributeValues'] == {
+            ':id' => {'S' => '1234'},
+            ':version' => {'N' => '0'},
+            ':isDraft' => {'BOOL' => true}
+          }
       end
     end
   end
