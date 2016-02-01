@@ -62,7 +62,7 @@ class Relish
 
     def put_version(id, version, item)
       db.put_item(@table_name, item,
-                  :ConditionExpression => 'id <> :id AND version <> :version',
+                  :ConditionExpression => 'id = :id AND version = :version',
                   :ExpressionAttributeValues => {
                     ':id' => {:S => id},
                     ':version' => {:N => version}
