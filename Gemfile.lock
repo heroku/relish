@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    relishable (0.36)
+    relishable (0.37)
       fog-aws (~> 0.8.0)
       legacy-fernet (~> 1.6.3)
       net-ssh (~> 3.0.2)
@@ -37,7 +37,7 @@ GEM
     mini_portile2 (2.0.0)
     multi_json (1.11.2)
     net-ssh (3.0.2)
-    nokogiri (1.6.7.1)
+    nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     power_assert (0.2.2)
     rake (10.4.2)
