@@ -15,7 +15,7 @@ class Relish
       Release.new.tap do |release|
         release.item = {}
         release.id = id
-        release.version = version
+        release.version = version.to_s
         data.each do |k, v|
           release.send("#{k}=", v.to_s) unless v.nil?
         end
