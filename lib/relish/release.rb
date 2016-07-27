@@ -20,6 +20,7 @@ class Relish
            :slug_uuid            => :S,
            :slug_id              => :S,
            :slug_checksum        => :S,
+           :slug_region          => :S,
            :slug_version         => :N,
            :stack                => :S,
            :language_pack        => :S,
