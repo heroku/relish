@@ -54,6 +54,7 @@ class Relish
         verifier.verify_token(token)
       end
     rescue OpenSSL::Cipher::CipherError
+    rescue MultiJson::ParseError
     end
   end
 end
