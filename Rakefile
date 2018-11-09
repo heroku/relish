@@ -15,9 +15,9 @@ task :release do
   current_version = Gem::Version.new(Relish::VERSION)
   new_version = Gem::Version.new(ENV["VERSION"])
 
-  if current_version >= new_version
-    abort("ERROR: Invalid version, already at #{Relish::VERSION}")
-  end
+  # if current_version >= new_version
+  #   abort("ERROR: Invalid version, already at #{Relish::VERSION}")
+  # end
 
   sh "ruby", "-i", "-pe", "$_.gsub!(/VERSION = .*/, %{VERSION = \"#{new_version}\"})", "lib/relish/version.rb"
   sh "bundle install"
