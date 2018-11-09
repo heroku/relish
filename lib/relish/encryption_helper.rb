@@ -54,6 +54,9 @@ class Relish
         verifier.verify_token(token)
       end
     rescue OpenSSL::Cipher::CipherError
+    # Certain combinations of keys and encrypted data cause decryption with an
+    # incorrect key to succeed (no CipherError) but produce garbage data which
+    # cannot be decoded into JSON, and thus fail with a ParseError instead.
     rescue MultiJson::ParseError
     end
   end
