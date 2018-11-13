@@ -1,6 +1,7 @@
 require "rubygems"
 require "bundler"
 
+require "date" # work around issue with safe_yaml
 Bundler.require(:default, :development)
 
 require "webmock/rspec"
