@@ -26,6 +26,11 @@ describe Relish::EncryptionHelper do
       expect(Fernet).to receive(:verifier).and_raise(MultiJson::ParseError)
       assert_equal data, decrypt_helper.decrypt(key, token)
     end
+
+    it 'assumes the key is env' do
+      token = encrypt_helper.encrypt(data)
+      assert_equal data, encrypt_helper.decrypt(token)
+    end
   end
 
   context "upgrading" do

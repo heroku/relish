@@ -13,11 +13,11 @@ class Relish
       @secrets = secrets
     end
 
-    def encrypt(key, value)
-      current_encrypt(key, value)
+    def encrypt(_key = 'env', value)
+      current_encrypt(value)
     end
 
-    def current_encrypt(_key, value)
+    def current_encrypt(value)
       Fernet.generate(hmac_secrets.first[0, 32], value)
     end
 
@@ -27,7 +27,7 @@ class Relish
       end
     end
 
-    def decrypt(key, token)
+    def decrypt(key = 'env', token)
       plain = nil
       hmac_secrets.each do |secret|
         plain = decrypt_with_secret(secret, token, key)
