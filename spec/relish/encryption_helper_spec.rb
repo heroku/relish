@@ -19,11 +19,12 @@ describe Relish::EncryptionHelper do
     end
 
     it 'ignores keys that raise JSON errors' do
-      allow(Fernet).to receive(:verifier).and_call_original
-      token = encrypt_helper.encrypt(key, data)
+      allow(Fernet::Legacy).to receive(:verifier).and_call_original
+      token = encrypt_helper.send(:legacy_encrypt, key, data)
       decrypt_helper = Relish::EncryptionHelper.new('static_secret', [bad_secret, good_secret])
+      allow(decrypt_helper).to receive(:legacy?) { true }
 
-      expect(Fernet).to receive(:verifier).and_raise(MultiJson::ParseError)
+      expect(Fernet::Legacy).to receive(:verifier).and_raise(MultiJson::ParseError)
       assert_equal data, decrypt_helper.decrypt(key, token)
     end
   end
@@ -38,18 +39,18 @@ describe Relish::EncryptionHelper do
 
   context "upgrading" do
     it "reads data encrypted with legacy fernet" do
-      legacy_token = encrypt_helper.legacy_encrypt('foo', 'bar')
+      legacy_token = encrypt_helper.send(:legacy_encrypt, 'foo', 'bar')
       assert_equal 'bar', encrypt_helper.decrypt('foo', legacy_token)
     end
 
     it "reads data encrypted with non-legacy fernet" do
-      token = encrypt_helper.current_encrypt('bar')
+      token = encrypt_helper.send(:current_encrypt, 'bar')
       assert_equal 'bar', encrypt_helper.decrypt(token)
     end
 
     it "writes data encrypted with non-legacy fernet" do
       token = encrypt_helper.encrypt('bar')
-      assert_equal false, encrypt_helper.legacy?(token)
+      assert_equal false, encrypt_helper.send('legacy?'.to_sym, token)
     end
   end
 end
