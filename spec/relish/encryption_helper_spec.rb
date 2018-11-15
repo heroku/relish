@@ -27,10 +27,14 @@ describe Relish::EncryptionHelper do
       assert_equal data, decrypt_helper.decrypt(key, token)
     end
 
-    it 'assumes the key is env' do
-      token = encrypt_helper.encrypt(data)
-      assert_equal data, encrypt_helper.decrypt(token)
-    end
+  end
+
+  it 'assumes the key is env' do
+    token = encrypt_helper.encrypt(data)
+    assert_equal data, encrypt_helper.decrypt('env', token)
+
+    token = encrypt_helper.encrypt('env', data)
+    assert_equal data, encrypt_helper.decrypt(token)
   end
 
   context "upgrading" do
@@ -40,15 +44,13 @@ describe Relish::EncryptionHelper do
     end
 
     it "reads data encrypted with non-legacy fernet" do
-      token = encrypt_helper.current_encrypt('foo', 'bar')
-      assert_equal 'bar', encrypt_helper.decrypt('foo', token)
+      token = encrypt_helper.current_encrypt('bar')
+      assert_equal 'bar', encrypt_helper.decrypt(token)
     end
 
     it "writes data encrypted with non-legacy fernet" do
-      token = encrypt_helper.encrypt('foo', 'bar')
+      token = encrypt_helper.encrypt('bar')
       assert_equal false, encrypt_helper.legacy?(token)
     end
-
-    it "includes a key name as cipher meta data"
   end
 end
