@@ -37,13 +37,6 @@ class Relish
       plain
     end
 
-    def upgrade(key, token)
-      if verifier = verifier(hmac_secrets.first, token)
-        return encrypt(key, verifier.data[key]) if verifier.valid?
-      end
-      raise RelishDecryptionFailed
-    end
-
     def inspect
       "#<Relish::EncryptionHelper>"
     end
