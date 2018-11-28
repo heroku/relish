@@ -19,6 +19,12 @@ class Relish
       current_encrypt(value)
     end
 
+    def legacy_encrypt(key, value)
+      Fernet::Legacy.generate(hmac_secrets.first) do |gen|
+        gen.data = { key => value }
+      end
+    end
+
     def decrypt(key = 'env', token)
       plain = nil
       hmac_secrets.each do |secret|
@@ -39,12 +45,6 @@ class Relish
 
     def current_encrypt(value)
       Fernet.generate(hmac_secrets.first[0, 32], value)
-    end
-
-    def legacy_encrypt(key, value)
-      Fernet::Legacy.generate(hmac_secrets.first) do |gen|
-        gen.data = { key => value }
-      end
     end
 
     def legacy?(token)
