@@ -4,7 +4,6 @@ PATH
     relishable (0.41)
       fernet (~> 2.3)
       fog-aws (~> 0.8.0)
-      legacy-fernet (~> 1.6.3)
       net-ssh (~> 3.0.2)
 
 GEM
@@ -37,8 +36,6 @@ GEM
       nokogiri (>= 1.5.11, < 2.0.0)
     formatador (0.2.5)
     ipaddress (0.8.3)
-    legacy-fernet (1.6.4)
-      multi_json (~> 1.0)
     method_source (0.9.1)
     mini_portile2 (2.3.0)
     multi_json (1.13.1)
