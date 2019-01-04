@@ -7,4 +7,5 @@ rvm:
 cache: bundler
 script: bundle exec rake
 sudo: false
-
+before_install:
+  - gem install bundler -v '< 2'
