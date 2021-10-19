@@ -4,7 +4,7 @@ PATH
     relishable (0.42)
       fernet (~> 2.3)
       fog-aws (~> 0.8.0)
-      net-ssh (~> 3.0.2)
+      net-ssh (~> 6.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -41,7 +41,7 @@ GEM
     method_source (1.0.0)
     mini_portile2 (2.6.1)
     multi_json (1.15.0)
-    net-ssh (3.0.2)
+    net-ssh (6.1.0)
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
