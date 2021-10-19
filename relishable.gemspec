@@ -19,5 +19,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec",   "~> 3.10.0"
   s.add_development_dependency "test-unit"
   s.add_development_dependency "webmock", "~> 3.14.0"
-  s.add_development_dependency "pry-byebug"
+  s.add_development_dependency "pry"
 end
