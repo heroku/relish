@@ -36,6 +36,7 @@ GEM
       fog-core
       nokogiri (>= 1.5.11, < 2.0.0)
     formatador (0.3.0)
+    hashdiff (1.0.1)
     ipaddress (0.8.3)
     method_source (1.0.0)
     mini_portile2 (2.6.1)
@@ -71,9 +72,10 @@ GEM
     test-unit (3.5.0)
       power_assert
     valcro (0.1.1)
-    webmock (1.19.0)
-      addressable (>= 2.3.6)
+    webmock (3.14.0)
+      addressable (>= 2.8.0)
       crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
 
 PLATFORMS
   ruby
@@ -84,7 +86,7 @@ DEPENDENCIES
   relishable!
   rspec (~> 3.10.0)
   test-unit
-  webmock (~> 1.19.0)
+  webmock (~> 3.14.0)
 
 BUNDLED WITH
    2.2.29

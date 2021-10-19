@@ -18,6 +18,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rake",    "> 0"
   s.add_development_dependency "rspec",   "~> 3.10.0"
   s.add_development_dependency "test-unit"
-  s.add_development_dependency "webmock", "~> 1.19.0"
+  s.add_development_dependency "webmock", "~> 3.14.0"
   s.add_development_dependency "pry-byebug"
 end
