@@ -17,7 +17,7 @@ GEM
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     diff-lcs (1.2.5)
-    excon (0.62.0)
+    excon (0.87.0)
     fernet (2.3)
       valcro (~> 0.1)
     fog-aws (0.8.1)
