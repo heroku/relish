@@ -35,9 +35,9 @@ class Relish
     protected
 
     def hmac_secrets
-      @hmac_secrets ||= @secrets.map do |secret|
-        OpenSSL::HMAC.hexdigest('sha256', @static_secret, secret)
-      end
+      @static_secret = @static_secret.is_a?(String) ? [@static_secret] : @static_secret
+      @hmac_secrets ||= @static_secret.product(@secrets).map {|static_secret, secret|
+        OpenSSL::HMAC.hexdigest('sha256', static_secret, secret)}
     end
 
     def decrypt_with_secret(secret, token)
