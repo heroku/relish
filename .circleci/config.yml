@@ -44,17 +44,17 @@ jobs:
   # Add a new job if you want to test on a different version
   ruby-25:
     docker:
-    - image: circleci/ruby:2.5
+    - image: cimg/ruby:2.5
     steps:
     - setup_and_run
   ruby-26:
     docker:
-    - image: circleci/ruby:2.6
+    - image: cimg/ruby:2.6
     steps:
     - setup_and_run
   ruby-27:
     docker:
-    - image: circleci/ruby:2.7
+    - image: cimg/ruby:2.7
     steps:
     - setup_and_run
 
