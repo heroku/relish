@@ -1,0 +1,73 @@
+---
+version: 2.1
+
+references:
+  gem_cache_key: &gem_cache_key
+    gem-cache-v2-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "Gemfile" }}-{{ checksum "relishable.gemspec" }}
+
+  restore_gems: &restore_gems
+    restore_cache:
+      keys:
+        - *gem_cache_key
+        - gem-cache-v2-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-
+
+commands:
+  setup_and_run:
+    description: "Setup and run test"
+    steps:
+    - checkout
+
+    - run:
+        name: "Install latest Bundler/Update RubyGems"
+        command: |
+          gem update --system
+          gem install bundler
+
+    - *restore_gems
+
+    - run:
+        name: "Install Gems via Bundler"
+        command: |
+          bundle config set --local path "vendor/bundle"
+          bundle check || bundle install
+
+    - save_cache:
+        key: *gem_cache_key
+        paths:
+          - vendor/bundle
+
+    - run:
+        name: "Run tests"
+        command: bundle exec rspec
+
+jobs:
+  # Add a new job if you want to test on a different version
+  ruby-25:
+    docker:
+    - image: circleci/ruby:2.5
+    steps:
+    - setup_and_run
+  ruby-26:
+    docker:
+    - image: circleci/ruby:2.6
+    steps:
+    - setup_and_run
+  ruby-27:
+    docker:
+    - image: circleci/ruby:2.7
+    steps:
+    - setup_and_run
+  ruby-30:
+    docker:
+      - image: circleci/ruby:3.0
+    steps:
+      - setup_and_run
+
+workflows:
+  version: 2
+  ci-pipeline:
+    jobs:
+    - ruby-25
+    - ruby-26
+    - ruby-27
+    - ruby-30
