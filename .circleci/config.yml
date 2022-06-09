@@ -38,7 +38,7 @@ commands:
 
     - run:
         name: "Run tests"
-        command: bundle exec rspec
+        command: bundle exec rake
 
 jobs:
   # Add a new job if you want to test on a different version
