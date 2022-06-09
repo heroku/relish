@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/heroku/relish/tree/master.svg?style=svg)](https://circleci.com/gh/heroku/relish/tree/master)
+
 # Relish
 
 A release manager.
