@@ -57,11 +57,6 @@ jobs:
     - image: circleci/ruby:2.7
     steps:
     - setup_and_run
-  ruby-30:
-    docker:
-      - image: circleci/ruby:3.0
-    steps:
-      - setup_and_run
 
 workflows:
   version: 2
@@ -70,4 +65,3 @@ workflows:
     - ruby-25
     - ruby-26
     - ruby-27
-    - ruby-30
