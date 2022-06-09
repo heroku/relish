@@ -7,8 +7,8 @@ class RelishDecryptionFailed < RuntimeError; end
 class Relish
   class EncryptionHelper
 
-    def initialize(static_secret, secrets)
-      @static_secret = static_secret
+    def initialize(static_secrets, secrets)
+      @static_secrets = static_secrets.is_a?(String) ? [static_secrets] : static_secrets
       @secrets = secrets
     end
 
@@ -35,8 +35,7 @@ class Relish
     protected
 
     def hmac_secrets
-      @static_secret = @static_secret.is_a?(String) ? [@static_secret] : @static_secret
-      @hmac_secrets ||= @static_secret.product(@secrets).map {|static_secret, secret|
+      @hmac_secrets ||= @static_secrets.product(@secrets).map {|static_secret, secret|
         OpenSSL::HMAC.hexdigest('sha256', static_secret, secret)}
     end
 
