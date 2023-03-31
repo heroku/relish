@@ -73,4 +73,18 @@ describe Relish do
       end
     end
   end
+
+  describe "#create" do
+    it "makes a POST to the Dynamo API" do
+      @relish.create("1234", { name: "foobar" })
+      assert_requested(:post, @dynamo_url) do |req|
+        params = MultiJson.decode(req.body)
+        params['KeyConditionExpression'] == 'id = :id AND version > :version' &&
+          params['ExpressionAttributeValues'] == {
+            ':id' => {'S' => '1234'},
+            ':version' => {'N' => '0'}
+          }
+      end
+    end
+  end
 end
