@@ -1,3 +1,11 @@
+Warning[:deprecated] = true
+
+require "simplecov"
+SimpleCov.start do
+  # Keeps simplecov from calculating coverage of the spec files themselves
+  add_filter "spec"
+end
+
 require "rubygems"
 require "bundler"
 

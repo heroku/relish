@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "test-unit"
   s.add_development_dependency "webmock", "~> 3.18.1"
   s.add_development_dependency "pry"
+  s.add_development_dependency "simplecov"
 end
