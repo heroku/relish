@@ -12,12 +12,12 @@ Gem::Specification.new do |s|
 
   s.files = Dir["lib/**/*.rb"] + Dir["Gemfile*"]
   s.require_paths = ["lib"]
-  s.add_dependency "fog-aws",       "~> 3.12.0"
+  s.add_dependency "fog-aws",       "~> 3.18.0"
   s.add_dependency "fernet",        "~> 2.3"
-  s.add_dependency "net-ssh",       "~> 6.1.0"
+  s.add_dependency "net-ssh",       "~> 7.1.0"
   s.add_development_dependency "rake",    "> 0"
-  s.add_development_dependency "rspec",   "~> 3.10.0"
+  s.add_development_dependency "rspec",   "~> 3.12.0"
   s.add_development_dependency "test-unit"
-  s.add_development_dependency "webmock", "~> 3.14.0"
+  s.add_development_dependency "webmock", "~> 3.18.1"
   s.add_development_dependency "pry"
 end
