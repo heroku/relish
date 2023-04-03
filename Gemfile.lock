@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    relishable (0.44)
+    relishable (1.0.0)
       fernet (~> 2.3)
       fog-aws (~> 3.18.0)
       net-ssh (~> 7.1.0)

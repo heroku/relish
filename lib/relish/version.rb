@@ -1,3 +1,3 @@
 class Relish
-  VERSION = "0.44"
+  VERSION = "1.0.0"
 end
