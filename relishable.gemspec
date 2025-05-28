@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
 
   s.files = Dir["lib/**/*.rb"] + Dir["Gemfile*"]
   s.require_paths = ["lib"]
-  s.add_dependency "fog-aws",       "~> 3.18.0"
+  s.add_dependency "fog-aws",       ">= 3.18", "< 3.33"
   s.add_dependency "fernet",        "~> 2.3"
   s.add_dependency "net-ssh",       "~> 7.1.0"
   s.add_development_dependency "rake",    "> 0"
