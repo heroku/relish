@@ -55,7 +55,7 @@ GEM
     nokogiri (1.15.7)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    power_assert (2.0.3)
+    power_assert (2.0.5)
     pry (0.15.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -82,7 +82,7 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
-    test-unit (3.5.7)
+    test-unit (3.6.8)
       power_assert
     valcro (0.1.1)
     webmock (3.18.1)
