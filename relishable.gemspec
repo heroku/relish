@@ -16,6 +16,8 @@ Gem::Specification.new do |s|
   s.add_dependency "fog-aws",       ">= 3.18", "< 3.33"
   s.add_dependency "fernet",        "~> 2.3"
   s.add_dependency "net-ssh",       ">= 7.1", "< 7.4"
+  s.add_dependency "bigdecimal"
+  s.add_dependency "base64"
   s.add_development_dependency "rake",    "> 0"
   s.add_development_dependency "rspec",   "~> 3.13.1"
   s.add_development_dependency "test-unit"
