@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.summary = "releases"
   s.authors = ["Mark Fine", "Blake Gentry", "Pedro Belo", "Joshua Tobin"]
   s.homepage = "http://github.com/heroku/relish"
-  s.required_ruby_version = ">= 2.7"
+  s.required_ruby_version = ">= 3.1.0"
 
   s.files = Dir["lib/**/*.rb"] + Dir["Gemfile*"]
   s.require_paths = ["lib"]
