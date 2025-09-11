@@ -22,10 +22,10 @@ task :release do
   sh "ruby", "-i", "-pe", "$_.gsub!(/VERSION = .*/, %{VERSION = \"#{new_version}\"})", "lib/relish/version.rb"
   sh "bundle install"
   sh "git commit -a -m 'v#{new_version}'"
-  sh "git tag v#{new_version} && git push origin master --tags"
+  sh "git tag v#{new_version} && git push origin main --tags"
   sh "gem build relishable.gemspec"
   sh "gem push relishable-#{new_version}.gem"
-  sh "git push origin master --tags"
+  sh "git push origin main --tags"
   sh "rm relishable-#{new_version}.gem"
 end
 
