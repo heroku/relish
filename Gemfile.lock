@@ -67,7 +67,7 @@ GEM
       method_source (~> 1.0)
     public_suffix (6.0.2)
     racc (1.8.1)
-    rake (13.3.0)
+    rake (13.3.1)
     reline (0.6.2)
       io-console (~> 0.5)
     rexml (3.4.4)
