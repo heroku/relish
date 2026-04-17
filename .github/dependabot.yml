@@ -4,4 +4,20 @@ updates:
     insecure-external-code-execution: allow
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      time: "12:00"
+      day: "wednesday"
+      timezone: "America/Los_Angeles"
+    cooldown:
+      default-days: 7
+    labels: []
+    groups:
+      minor-dependencies:
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      # ignore all major version updates
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
