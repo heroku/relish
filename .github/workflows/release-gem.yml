@@ -1,0 +1,31 @@
+name: Release Gem
+on:
+  # Triggers the workflow on push with a tag prefixed with v*
+  push:
+    tags:
+      - 'v*'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: sfdc-hk-ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: ruby/setup-ruby@0cb964fd540e0a24c900370abf38a33466142735 # v1.305.0
+        with:
+          ruby-version: ruby
+          bundler-cache: true
+      - name: Publish gem
+        env:
+          PACKAGECLOUD_TOKEN: "${{secrets.PACKAGECLOUD_PUBLISH_TOKEN}}"
+        run: |
+          mkdir -p $HOME/.gem
+          touch $HOME/.gem/credentials
+          chmod 0600 $HOME/.gem/credentials
+          printf -- "---\n:BUNDLE_PACKAGECLOUD__IO: ${PACKAGECLOUD_TOKEN}\n" > $HOME/.gem/credentials
+          gem build *.gemspec
+          gem install package_cloud
+          gem=`ls | grep .gem$`
+          package_cloud push heroku/gemgate $gem
