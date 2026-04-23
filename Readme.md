@@ -127,3 +127,24 @@ Dump release data for id `abc`:
 > rels[1].slug_version
 => "1"
 >
+
+## Releasing new versions of the gem
+
+The `relish` gem is hosted on a private RubyGems server via [packagecloud][packagecloud] and releases are generated with
+[the Release Gem action](.github/workflows/release-gem.yml).
+
+When you are ready to release a new version
+
+1. Update the gem version in [lib/gateway/authentication/version.rb](lib/gateway/authentication/version.rb).
+2. Merge [lib/gateway/authentication/version.rb](lib/gateway/authentication/version.rb) to main.
+3. Make sure you are on main and have the latest version of the code
+   1. `git checkout main`
+   2. `git fetch -p origin`
+   3. `git merge --ff-only origin/main`
+4. Tag the version
+   1. `git tag -a vX.Y.Z` (where `X.Y.Z` is the version number on the version file)
+   2. `git push origin vX.Y.Z`
+
+And that's it, the release gem action will build the updated version of the gem and upload the new gem package to packagecloud.
+
+[packagecloud]: https://packagecloud.io
