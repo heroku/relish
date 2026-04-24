@@ -11,7 +11,7 @@ describe Relish do
     it "makes a POST to the Dynamo API" do
       @relish.copy("1234", "1", { name: "foobar" })
       assert_requested(:post, @dynamo_url) do |req|
-        params = MultiJson.decode(req.body)
+        params = MultiJson.load(req.body)
         item   = params["Item"]
         params["TableName"] == "table" &&
           item["id"]      == { "S" => "1234" } &&
@@ -24,7 +24,7 @@ describe Relish do
     it "creates a draft release" do
       @relish.copy("1234", "1", { name: "foobar", draft: true })
       assert_requested(:post, @dynamo_url) do |req|
-        params = MultiJson.decode(req.body)
+        params = MultiJson.load(req.body)
         params["Item"]["draft"] == { "BOOL" => 'true' }
       end
     end
@@ -62,7 +62,7 @@ describe Relish do
       @relish.current("1234")
 
       assert_requested(:post, @dynamo_url) do |req|
-        params = MultiJson.decode(req.body)
+        params = MultiJson.load(req.body)
         params['KeyConditionExpression'] == 'id = :id AND version > :version' &&
           params['FilterExpression'] == 'draft <> :isDraft' &&
           params['ExpressionAttributeValues'] == {
@@ -78,7 +78,7 @@ describe Relish do
     it "makes a POST to the Dynamo API" do
       @relish.create("1234", { name: "foobar" })
       assert_requested(:post, @dynamo_url) do |req|
-        params = MultiJson.decode(req.body)
+        params = MultiJson.load(req.body)
         params['KeyConditionExpression'] == 'id = :id AND version > :version' &&
           params['ExpressionAttributeValues'] == {
             ':id' => {'S' => '1234'},
