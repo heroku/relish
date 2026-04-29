@@ -127,16 +127,16 @@ Dump release data for id `abc`:
 > rels[1].slug_version
 => "1"
 >
+```
 
 ## Releasing new versions of the gem
 
-The `relish` gem is hosted on a private RubyGems server via [packagecloud][packagecloud] and releases are generated with
-[the Release Gem action](.github/workflows/release-gem.yml).
+The `relish` gem is hosted on the public [RubyGems](https://rubygems.org/gems/relishable) server under the opensourceheroku account.
 
 When you are ready to release a new version
 
-1. Update the gem version in [lib/gateway/authentication/version.rb](lib/gateway/authentication/version.rb).
-2. Merge [lib/gateway/authentication/version.rb](lib/gateway/authentication/version.rb) to main.
+1. Update the gem version in [lib/relish/version.rb](lib/relish/version.rb).
+2. Merge [lib/relish/version.rb](lib/relish/version.rb) to main.
 3. Make sure you are on main and have the latest version of the code
    1. `git checkout main`
    2. `git fetch -p origin`
@@ -144,7 +144,9 @@ When you are ready to release a new version
 4. Tag the version
    1. `git tag -a vX.Y.Z` (where `X.Y.Z` is the version number on the version file)
    2. `git push origin vX.Y.Z`
-
-And that's it, the release gem action will build the updated version of the gem and upload the new gem package to packagecloud.
-
-[packagecloud]: https://packagecloud.io
+5. Build the gem
+   1. `gem build relishable.gemspec`
+   2. A file named `relishable-X.Y.Z.gem` should have been created
+6. Push the gem
+   1. Read [this guide](https://github.com/heroku/engineering-docs/blob/master/guides/contribute-to-open-source.md#ruby)
+   2. `gem push relishable-X.Y.Z.gem`
