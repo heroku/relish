@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency "nokogiri"
   s.add_dependency "bigdecimal"
   s.add_dependency "base64"
+  s.add_development_dependency "multi_json"
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
   s.add_development_dependency "test-unit"
