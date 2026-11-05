@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.add_dependency "fog-aws", ">= 3.18", "< 3.34"
   s.add_dependency "fernet", "~> 2.3"
-  s.add_dependency "net-ssh", ">= 7.1", "< 7.4"
+  s.add_dependency "net-ssh", ">= 7.1", "< 8.1"
   s.add_dependency "nokogiri"
   s.add_dependency "bigdecimal"
   s.add_dependency "base64"
